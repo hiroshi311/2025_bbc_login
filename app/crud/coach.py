@@ -3,9 +3,9 @@ from app.db.base import Coach
 from app.schemas.coach import CoachCreate
 import uuid
 from datetime import datetime
-from app.core.security import get_password_hash
+from typing import Optional
 
-def create_coach(db: Session, coach_in: CoachCreate) -> Coach:
+def create_coach(db: Session, coach_in: CoachCreate, password_hash: str) -> Coach:
     coach = Coach(
         coach_id=str(uuid.uuid4()),
         usertype=coach_in.usertype,
@@ -18,7 +18,7 @@ def create_coach(db: Session, coach_in: CoachCreate) -> Coach:
         SNS_handle_youtube=coach_in.SNS_handle_youtube,
         SNS_handle_facebook=coach_in.SNS_handle_facebook,
         SNS_handle_tiktok=coach_in.SNS_handle_tiktok,
-        password_hash=get_password_hash(coach_in.password),
+        password_hash=password_hash,
         line_user_id=coach_in.line_user_id,
         profile_picture_url=coach_in.profile_picture_url,
         bio=coach_in.bio,
@@ -38,5 +38,6 @@ def create_coach(db: Session, coach_in: CoachCreate) -> Coach:
     db.refresh(coach)
     return coach
 
-def get_by_email(db: Session, email: str) -> Coach | None:
+def get_by_email(db: Session, email: str) -> Optional[Coach]:
     return db.query(Coach).filter(Coach.email == email).first()
+

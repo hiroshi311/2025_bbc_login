@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from sqlalchemy.orm import Session
 from uuid import uuid4
 from datetime import datetime
+import os
 from app.db.session import get_db
 from app.models.user import User
 from app.models.video import Video
